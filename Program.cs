@@ -13,14 +13,16 @@ if (resp == "1")
     Console.WriteLine("How many weeks of data is needed?");
     // input the response (convert to int)
     int weeks = Convert.ToInt32(Console.ReadLine());
-      // determine start and end date
+    // determine start and end date
     DateTime today = DateTime.Now;
     // we want full weeks sunday - saturday
     DateTime dataEndDate = today.AddDays(-(int)today.DayOfWeek);
     // subtract # of weeks from endDate to get startDate
     DateTime dataDate = dataEndDate.AddDays(-(weeks * 7));
-      // random number generator
+    // random number generator
     Random rnd = new();
+    // create file
+    StreamWriter sw = new("data.txt");
 
     // loop for the desired # of weeks
     while (dataDate < dataEndDate)
@@ -33,10 +35,12 @@ if (resp == "1")
             hours[i] = rnd.Next(4, 13);
         }
         // M/d/yyyy,#|#|#|#|#|#|#
-        Console.WriteLine($"{dataDate:M/d/yy},{string.Join("|", hours)}");
+        // Console.WriteLine($"{dataDate:M/d/yy},{string.Join("|", hours)}");
+        sw.WriteLine($"{dataDate:M/d/yyyy},{string.Join("|", hours)}");
         // add 1 week to date
         dataDate = dataDate.AddDays(7);
     }
+    sw.Close();
 }//
 else if (resp == "2")
 {
