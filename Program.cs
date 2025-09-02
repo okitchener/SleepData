@@ -37,7 +37,7 @@ if (resp == "1")
         // add 1 week to date
         dataDate = dataDate.AddDays(7);
     }
-}
+}//
 else if (resp == "2")
 {
     // TODO: parse data file
