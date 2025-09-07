@@ -44,6 +44,66 @@ if (resp == "1")
 }//
 else if (resp == "2")
 {
-    // TODO: parse data file
+    if (!File.Exists("data.txt"))
+    {
+        Console.WriteLine("Data file not found. Please create data first.");
+        return;
+    }
 
+    // Read all lines from the file
+    string[] lines = File.ReadAllLines("data.txt");
+
+    foreach (string line in lines)
+    {
+        // Each line: date,h1|h2|h3|h4|h5|h6|h7
+        var parts = line.Split(',');
+
+        if (parts.Length != 2)
+        {
+            Console.WriteLine("Invalid data format.");
+            continue;
+        }
+
+        // Parse the start date of the week
+        if (!DateTime.TryParse(parts[0], out DateTime weekStart))
+        {
+            Console.WriteLine("Invalid date format.");
+            continue;
+        }
+
+        // Parse hours slept each night (Did get a little help from google here)
+        string[] hourStrings = parts[1].Split('|');
+        if (hourStrings.Length != 7)
+        {
+            Console.WriteLine("Invalid hours data.");
+            continue;
+        }
+
+        int[] hours = new int[7];
+        for (int i = 0; i < 7; i++)
+        {
+            if (!int.TryParse(hourStrings[i], out hours[i]))
+            {
+                Console.WriteLine("Invalid hour value.");
+                break;
+            }
+        }
+
+        // Extra Credit Here Calculate total and average hours for the week
+        int total = hours.Sum();
+        double average = total / 7.0;
+
+        // Print the weekly report with exact formatting
+        Console.WriteLine($"Week of {weekStart:MMM, dd, yyyy}");
+        Console.WriteLine(" Su Mo Tu We Th Fr Sa Tot Avg");
+        Console.WriteLine(" --  --  --  --  --  --  --  ---  ---");
+
+        // Format each hour with width 3, right-aligned, with spaces between,
+        // Then total width 4, average width 4 with 1 decimal place
+        // Example: "  7   4   10   6   9  11   7   48  6.9"
+        Console.WriteLine(
+            $" {hours[0],2}  {hours[1],2}  {hours[2],2}  {hours[3],2}  {hours[4],2}  {hours[5],2}  {hours[6],2}  {total,3} {average,4:F1}");
+
+        Console.WriteLine();
+    }
 }
